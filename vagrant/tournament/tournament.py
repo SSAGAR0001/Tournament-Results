@@ -17,14 +17,14 @@ def connect():
 
 def deleteMatches():
 	db, cur = connect()
-	q = "TRUNCATE " + 'games'
+	q = "TRUNCATE matches"
 	cur.execute(q)
 	db.commit()
 	db.close()
 
 def deletePlayers():
 	db, cur = connect()
-	q = "TRUNCATE " + 'players'
+	q = "TRUNCATE TABLE players CASCADE"
 	cur.execute(q)
 	db.commit()
 	cur.close()
@@ -42,7 +42,7 @@ def countPlayers():
 
 def registerPlayer(name):
 	if name:
-	    q = "isert into players(name) values(%s)"
+	    q = "insert into players(name) values(%s)"
 	    db,cur = connect()
 	    cur.execute(q, (name, ))
 	    db.commit()
@@ -62,7 +62,7 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    q = "select p_id, name, wins, played from rank"
+    q = "select * from results"
     db, cur = connect()
     cur.execute(q)
     value = cur.fetchall()
@@ -99,21 +99,14 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
-    pairing = []
-    total_players = countPlayers()
-    for i in range(0, total_players, 2):
-	    q = """select p_id, name from rank order by wins 
-	    limit 2 offset""" + str(i)
-	    result = running(q)
-	    result = result[0] + result[1]
-	    pairing.append(result)
+    total_pairs = []
+    results = playerStandings()
+    count = len(results)
+    for i in range(0, count - 1, 2):
+	    pairing(results[i][0], results[i][1],results[i+1][0],
+	    	        results[i+1][1])
+	    total_pairs.append(pairing)
+	db.close()
 
-	    return pairing
+	    return total_pairs
 
-def running(query):
-    db, cur = connect()
-    cur.execute(query)
-    value = cur.fetchall()
-    cur.close()
-    db.close()
-    return value
