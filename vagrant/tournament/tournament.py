@@ -103,10 +103,9 @@ def swissPairings():
     results = playerStandings()
     count = len(results)
     for i in range(0, count - 1, 2):
-	    pairing = (results[i][0], results[i][1],results[i+1][0],
+        pairing = (results[i][0], results[i][1],results[i+1][0],
 	    	       results[i+1][1])
 	    total_pairs.append(pairing)
-	db.close()
 
 	    return total_pairs
 
