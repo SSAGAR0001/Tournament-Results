@@ -42,7 +42,7 @@ def countPlayers():
 
 def registerPlayer(name):
 	if name:
-	    q = "insert into players(name) values(%s)"
+	    q = "insert into players(p_name) values(%s)"
 	    db,cur = connect()
 	    cur.execute(q, (name, ))
 	    db.commit()
@@ -78,7 +78,7 @@ def reportMatch(winner, loser):
       loser:  the id number of the player who lost
     """
     db, cur = connect()
-    q = "insert into game(winner, loser) values(%s, %s)"
+    q = "insert into matches(winner, loser) values(%s, %s)"
     cur.execute(q, (winner, loser))
     db.commit()
     db.close()
@@ -103,8 +103,8 @@ def swissPairings():
     results = playerStandings()
     count = len(results)
     for i in range(0, count - 1, 2):
-	    pairing(results[i][0], results[i][1],results[i+1][0],
-	    	        results[i+1][1])
+	    pairing = (results[i][0], results[i][1],results[i+1][0],
+	    	       results[i+1][1])
 	    total_pairs.append(pairing)
 	db.close()
 
