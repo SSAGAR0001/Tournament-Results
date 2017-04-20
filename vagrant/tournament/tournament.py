@@ -106,6 +106,5 @@ def swissPairings():
         pairing = (results[i][0], results[i][1],results[i+1][0],
 	    	       results[i+1][1])
 	    total_pairs.append(pairing)
-
-	    return total_pairs
+    return total_pairs
 
